@@ -23,6 +23,12 @@ procedural lagoon, reef islands, overwater villas, palms, a boat, and a
 day/weather system. No backend, no tracking, no external assets beyond the
 Three.js CDN.
 
+## Use and credit
+
+CC BY 4.0 — copy-ready attribution, HTML snippet, press image and
+commercial / white-label licensing:
+[credit.html](https://huagechen-lab.github.io/maldives-atoll/credit.html).
+
 ## Credits and license
 
 - Scene: **孙小画** · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
