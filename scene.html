@@ -347,7 +347,7 @@
   </div>
 
   <div class="fallback" id="fallback">
-    <span class="lang-zh">当前浏览器无法加载 WebGL 场景。<br />请使用最新版 Chrome、Safari 或 Edge 打开。</span>
+    <span class="lang-zh">当前浏览器无法加载三维场景。<br />请使用最新版浏览器打开。</span>
     <span class="lang-en">This browser cannot load the WebGL scene.<br />Please use a current Chrome, Safari or Edge.</span>
   </div>
 
@@ -3134,7 +3134,7 @@ ${isletDistanceGLSL}
     lang = lang === 'en' ? 'en' : 'zh';
     const zh = lang === 'zh';
     document.documentElement.lang = zh ? 'zh-CN' : 'en';
-    document.title = zh ? '马尔代夫环礁 · 3D 场景' : 'Maldives Atoll · 3D scene';
+    document.title = zh ? '马尔代夫环礁 · 三维场景' : 'Maldives Atoll · 3D scene';
     const set = (sel, text) => { const el = document.querySelector(sel); if (el) el.textContent = text; };
     set('#panelTitle', zh ? '环礁光景' : 'Atoll scene');
     set('#panelCoord', zh ? '北纬 04°11′ · 东经 73°30′' : '04°11′N · 73°30′E');
