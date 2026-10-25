@@ -194,6 +194,24 @@
     function ready() { document.body.classList.add('ready'); }
     frame.addEventListener('load', function () { setTimeout(ready, 700); });
     setTimeout(ready, 6000); /* 兜底：CDN 慢时也别一直挡着 */
+
+    var MOVE = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
+    function send(dir, down) {
+      if (frame && frame.contentWindow) frame.contentWindow.postMessage({ type: 'maldives-move', dir: dir, down: down }, '*');
+    }
+    window.addEventListener('keydown', function (e) {
+      var d = MOVE[e.key];
+      if (!d || e.metaKey || e.ctrlKey || e.altKey) return;
+      e.preventDefault();
+      send(d, true);
+    });
+    window.addEventListener('keyup', function (e) {
+      var d = MOVE[e.key];
+      if (d) send(d, false);
+    });
+    window.addEventListener('blur', function () {
+      ['up', 'down', 'left', 'right'].forEach(function (d) { send(d, false); });
+    });
   })();
 </script>
 </body>

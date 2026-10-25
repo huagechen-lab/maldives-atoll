@@ -302,6 +302,7 @@
     <span class="mouse" aria-hidden="true"></span>
     <span>拖动环视</span><span class="dot">·</span>
     <span>滚轮缩放</span><span class="dot">·</span>
+    <span>方向键移动</span><span class="dot">·</span>
     <span class="fine">双击复位</span>
   </div>
 
@@ -3159,6 +3160,78 @@ ${isletDistanceGLSL}
     if (autoOrbit) { autoOrbit = false; syncOrbitUI(); }
   });
 
+  /* ── arrow-key camera movement (pan, keeps orbit orientation) ── */
+  const MOVE_KEYS = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
+  const moveHeld = Object.create(null);
+  const moveFwd = new THREE.Vector3();
+  const moveRight = new THREE.Vector3();
+  const moveDelta = new THREE.Vector3();
+  const MOVE_UP = new THREE.Vector3(0, 1, 0);
+
+  function beginArrowMove(dir) {
+    if (!dir) return;
+    if (!controls.enabled && !camReset) return;   // god-view / reset flight in progress
+    moveHeld[dir] = true;
+    if (camReset) { camReset = null; controls.enabled = true; }
+    if (autoOrbit) { autoOrbit = false; syncOrbitUI(); }
+  }
+  window.addEventListener('keydown', (e) => {
+    const dir = MOVE_KEYS[e.key];
+    if (!dir || e.metaKey || e.ctrlKey || e.altKey) return;
+    e.preventDefault();
+    beginArrowMove(dir);
+  });
+  window.addEventListener('keyup', (e) => {
+    const dir = MOVE_KEYS[e.key];
+    if (dir) moveHeld[dir] = false;
+  });
+  window.addEventListener('message', (e) => {
+    if (e.source !== window.parent) return;
+    const d = e.data;
+    if (!d || d.type !== 'maldives-move') return;
+    if (d.reset) { for (const k in moveHeld) moveHeld[k] = false; return; }
+    if (d.down) beginArrowMove(d.dir);
+    else moveHeld[d.dir] = false;
+  });
+  window.addEventListener('blur', () => {
+    for (const k in moveHeld) moveHeld[k] = false;
+  });
+
+  function moveCamera(dt) {
+    const f = (moveHeld.up ? 1 : 0) - (moveHeld.down ? 1 : 0);
+    const s = (moveHeld.right ? 1 : 0) - (moveHeld.left ? 1 : 0);
+    if (!f && !s) return;
+    const dist = camera.position.distanceTo(controls.target);
+    moveFwd.subVectors(controls.target, camera.position);
+    moveFwd.y = 0;
+    if (moveFwd.lengthSq() < 1e-6) moveFwd.set(0, 0, -1);
+    else moveFwd.normalize();
+    moveRight.crossVectors(moveFwd, MOVE_UP).normalize();
+    moveDelta.set(0, 0, 0).addScaledVector(moveFwd, f).addScaledVector(moveRight, s);
+    if (moveDelta.lengthSq() > 1) moveDelta.normalize();
+    const len = moveDelta.length();
+    if (len < 1e-6) return;
+    const dx = moveDelta.x / len, dz = moveDelta.z / len;
+
+    /* stop at the diorama boundary instead of zooming the view */
+    const maxR = 300;
+    const room = (px, pz) => {
+      const a = px * dx + pz * dz;
+      const b = maxR * maxR - (px * px + pz * pz);
+      if (b < 0) return 0;
+      return Math.max(0, -a + Math.sqrt(Math.max(0, a * a + b)));
+    };
+    const speed = Math.max(14, Math.min(85, dist * 0.42)) * Math.min(dt, 0.05);
+    const step = Math.min(speed, room(camera.position.x, camera.position.z), room(controls.target.x, controls.target.z));
+    if (step <= 1e-4) return;
+    camera.position.x += dx * step;
+    camera.position.z += dz * step;
+    controls.target.x += dx * step;
+    controls.target.z += dz * step;
+    camera.position.y = Math.max(camera.position.y, 9);
+    controls.target.y = Math.max(controls.target.y, 1);
+  }
+
   /* ── storm flashes ─────────────────────────────────────────── */
   let flashT = -1;
   let nextStrike = 4.5;
@@ -3261,6 +3334,7 @@ ${isletDistanceGLSL}
         camReset = null;
       }
     } else {
+      moveCamera(dt);
       controls.update();
     }
 

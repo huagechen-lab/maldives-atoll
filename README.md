@@ -6,6 +6,7 @@ A standalone, interactive 3D Maldives atoll you can open in the browser.
 
 ## Controls
 
+- Arrow keys move the camera (forward / back / strafe); works from the landing page too
 - Drag to orbit, scroll / pinch to zoom
 - Double-click to reset the camera
 - Time presets: Day / Golden hour / Night
