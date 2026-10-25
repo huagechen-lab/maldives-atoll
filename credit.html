@@ -206,10 +206,17 @@ Changes: none.</pre>
 <script>
 (function () {
   var langBtn = document.getElementById('lang');
+  function applyTitle() {
+    document.title = document.documentElement.lang === 'en'
+      ? 'Use this work · Maldives Atoll · CC BY 4.0'
+      : '使用与署名 · 马尔代夫环礁 · CC BY 4.0';
+  }
+  applyTitle();
   if (langBtn) langBtn.addEventListener('click', function () {
     var next = document.documentElement.lang === 'en' ? 'zh' : 'en';
     document.documentElement.lang = next === 'zh' ? 'zh-CN' : 'en';
     try { localStorage.setItem('maldives-lang', next); } catch (e) { /* storage may be disabled */ }
+    applyTitle();
   });
 
   document.addEventListener('click', function (e) {

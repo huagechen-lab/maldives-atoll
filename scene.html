@@ -4,8 +4,33 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#0b1f24" />
+<script>
+(function () {
+  try {
+    var q = new URLSearchParams(location.search).get('lang');
+    var raw = q || (navigator.languages && navigator.languages[0]) || navigator.language || 'zh';
+    document.documentElement.lang = /^en/i.test(raw) ? 'en' : 'zh-CN';
+  } catch (e) { /* keep default */ }
+})();
+</script>
 <title>马尔代夫环礁 · Maldives Atoll</title>
 <style>
+  html[lang="en"] .lang-zh { display: none !important; }
+  html:not([lang="en"]) .lang-en { display: none !important; }
+  html:not([lang="en"]) .seg button .en,
+  html:not([lang="en"]) .orbit-row .en { display: none !important; }
+  html[lang="en"] .seg button .cn,
+  html[lang="en"] .orbit-row .zh { display: none !important; }
+  html[lang="en"] .seg button .en {
+    display: block; font-size: 12px; letter-spacing: .06em; font-weight: 500; opacity: 1;
+  }
+  html[lang="en"] .seg.five button .en { font-size: 10.5px; letter-spacing: .02em; }
+  html[lang="en"] .seg button[aria-pressed="true"] .en { opacity: 1; }
+  html[lang="en"] .orbit-row .en {
+    display: block; font-size: 11px; letter-spacing: .14em; text-transform: none; opacity: 1;
+  }
+  .loader-en { display: none !important; }
+  .subline .sub-title { display: none !important; }
   :root{
     --ink:#f4f0e6;
     --ink-dim:rgba(244,240,230,.68);
@@ -244,13 +269,13 @@
       </svg>
     </div>
     <div>
-      <p class="kicker">Indian Ocean · 04°N 73°E</p>
-      <h1>马尔代夫环礁</h1>
+      <p class="kicker"><span class="lang-zh">印度洋 · 北纬 04° · 东经 73°</span><span class="lang-en">Indian Ocean · 04°N 73°E</span></p>
+      <h1><span class="lang-zh">马尔代夫环礁</span><span class="lang-en">Maldives Atoll</span></h1>
       <div class="subline">
         <span class="thin"></span>
-        <span>Maldives Atoll</span>
+        <span class="sub-title">Maldives Atoll</span>
         <span class="thin"></span>
-        <em>a private lagoon</em>
+        <em><span class="lang-zh">一处私人泻湖</span><span class="lang-en">a private lagoon</span></em>
       </div>
     </div>
   </header>
@@ -264,16 +289,16 @@
 
   <aside class="panel" aria-label="场景预设 Controls">
     <div class="panel-head">
-      <span class="title">环礁光景</span>
-      <span class="coord">04°11′N · 73°30′E</span>
+      <span class="title" id="panelTitle">环礁光景</span>
+      <span class="coord" id="panelCoord">北纬 04°11′ · 东经 73°30′</span>
     </div>
 
     <div class="group" role="group" aria-labelledby="lightLabel">
       <div class="group-head"><span id="lightLabel">光 · Light</span><span class="idx">01</span></div>
       <div class="seg" id="timeSeg">
-        <button type="button" data-time="day" aria-pressed="true"><span class="cn">日间</span><span class="en">DAY</span></button>
-        <button type="button" data-time="sunset" aria-pressed="false"><span class="cn">黄昏</span><span class="en">GOLDEN</span></button>
-        <button type="button" data-time="night" aria-pressed="false"><span class="cn">夜晚</span><span class="en">NIGHT</span></button>
+        <button type="button" data-time="day" aria-pressed="true"><span class="cn">日间</span><span class="en">Day</span></button>
+        <button type="button" data-time="sunset" aria-pressed="false"><span class="cn">黄昏</span><span class="en">Sunset</span></button>
+        <button type="button" data-time="night" aria-pressed="false"><span class="cn">夜晚</span><span class="en">Night</span></button>
       </div>
     </div>
 
@@ -282,11 +307,11 @@
     <div class="group" role="group" aria-labelledby="weatherLabel">
       <div class="group-head"><span id="weatherLabel">天 · Weather</span><span class="idx">02</span></div>
       <div class="seg five" id="weatherSeg">
-        <button type="button" data-weather="clear" aria-pressed="true"><span class="cn">晴朗</span><span class="en">CLEAR</span></button>
-        <button type="button" data-weather="scattered" aria-pressed="false"><span class="cn">疏云</span><span class="en">DRIFT</span></button>
-        <button type="button" data-weather="overcast" aria-pressed="false"><span class="cn">阴天</span><span class="en">VEIL</span></button>
-        <button type="button" data-weather="lightrain" aria-pressed="false"><span class="cn">小雨</span><span class="en">RAIN</span></button>
-        <button type="button" data-weather="storm" aria-pressed="false"><span class="cn">暴雨</span><span class="en">STORM</span></button>
+        <button type="button" data-weather="clear" aria-pressed="true"><span class="cn">晴朗</span><span class="en">Clear</span></button>
+        <button type="button" data-weather="scattered" aria-pressed="false"><span class="cn">疏云</span><span class="en">Drift</span></button>
+        <button type="button" data-weather="overcast" aria-pressed="false"><span class="cn">阴天</span><span class="en">Overcast</span></button>
+        <button type="button" data-weather="lightrain" aria-pressed="false"><span class="cn">小雨</span><span class="en">Drizzle</span></button>
+        <button type="button" data-weather="storm" aria-pressed="false"><span class="cn">暴雨</span><span class="en">Storm</span></button>
       </div>
     </div>
 
@@ -300,10 +325,10 @@
 
   <div class="hint">
     <span class="mouse" aria-hidden="true"></span>
-    <span>拖动环视</span><span class="dot">·</span>
-    <span>滚轮缩放</span><span class="dot">·</span>
-    <span>方向键移动</span><span class="dot">·</span>
-    <span class="fine">双击复位</span>
+    <span class="h-orbit">拖动环视</span><span class="dot">·</span>
+    <span class="h-zoom">滚轮缩放</span><span class="dot">·</span>
+    <span class="h-move">方向键移动</span><span class="dot">·</span>
+    <span class="fine h-reset">双击复位</span>
   </div>
 
   <div id="loader">
@@ -314,16 +339,16 @@
         <path d="M17 42c5-4 9-4 14 0s9 4 14 0 7-3 9-1" stroke="#f4f0e6" stroke-opacity=".6" stroke-width="7" stroke-linecap="round"/>
         <circle cx="35" cy="27.5" r="1.8" fill="#e9d3a4"/>
       </svg>
-      <div class="loader-kicker">Indian Ocean</div>
-      <div class="loader-title">马尔代夫环礁</div>
-      <div class="loader-en">Maldives Atoll</div>
+      <div class="loader-kicker"><span class="lang-zh">印度洋</span><span class="lang-en">Indian Ocean</span></div>
+      <div class="loader-title"><span class="lang-zh">马尔代夫环礁</span><span class="lang-en">Maldives Atoll</span></div>
       <div class="loader-line"><span></span></div>
-      <div class="loader-note">正在铺开一捧细白沙</div>
+      <div class="loader-note"><span class="lang-zh">正在铺开一捧细白沙</span><span class="lang-en">Spreading fine white sand</span></div>
     </div>
   </div>
 
   <div class="fallback" id="fallback">
-    当前浏览器无法加载 WebGL 场景。<br />请使用最新版 Chrome、Safari 或 Edge 打开。
+    <span class="lang-zh">当前浏览器无法加载 WebGL 场景。<br />请使用最新版 Chrome、Safari 或 Edge 打开。</span>
+    <span class="lang-en">This browser cannot load the WebGL scene.<br />Please use a current Chrome, Safari or Edge.</span>
   </div>
 
   <script type="importmap">
@@ -626,7 +651,11 @@
 })();
 (function () {
   var btn = document.createElement('button');
-  btn.textContent = '上 帝 视 角';
+  btn.id = 'godBtn';
+  btn.type = 'button';
+  btn.dataset.on = 'false';
+  btn.setAttribute('aria-pressed', 'false');
+  btn.textContent = document.documentElement.lang === 'en' ? 'God view' : '上帝视角';
   btn.style.cssText = 'position:fixed;right:26px;top:84px;z-index:90;padding:10px 16px;font-size:12px;letter-spacing:.22em;background:rgba(8,8,14,.45);color:#f2e3c8;border:1px solid rgba(255,232,194,.4);border-radius:999px;cursor:pointer;backdrop-filter:blur(8px);font-family:inherit';
   document.body.appendChild(btn);
   var __on = false, __raf = null, __saved = null;
@@ -645,7 +674,11 @@
   }
   btn.addEventListener('click', function () {
     __on = !__on;
-    btn.textContent = __on ? '返 回 原 位' : '上 帝 视 角';
+    btn.dataset.on = String(__on);
+    btn.setAttribute('aria-pressed', String(__on));
+    btn.textContent = document.documentElement.lang === 'en'
+      ? (__on ? 'Back to view' : 'God view')
+      : (__on ? '返回原位' : '上帝视角');
     if (__on) {
       __saved = { p: camera.position.clone(), t: controls.target.clone() };
       var dir = camera.position.clone().sub(controls.target); dir.y = Math.max(dir.y, 1); dir.normalize();
@@ -3070,8 +3103,14 @@ ${isletDistanceGLSL}
     statusTime: $('#statusTime'), statusWeather: $('#statusWeather'),
     dot: $('#liveDot'),
   };
-  const TIME_NAMES = { day: '日间', sunset: '黄昏', night: '夜晚' };
-  const WEATHER_NAMES = { clear: '晴朗', scattered: '疏云', overcast: '阴天', lightrain: '小雨', storm: '暴雨' };
+  const TIME_LABELS = {
+    zh: { day: '日间', sunset: '黄昏', night: '夜晚' },
+    en: { day: 'Day', sunset: 'Sunset', night: 'Night' }
+  };
+  const WEATHER_LABELS = {
+    zh: { clear: '晴朗', scattered: '疏云', overcast: '阴天', lightrain: '小雨', storm: '暴雨' },
+    en: { clear: 'Clear', scattered: 'Drift', overcast: 'Overcast', lightrain: 'Drizzle', storm: 'Storm' }
+  };
   const TIME_DOTS = { day: '#f0dba8', sunset: '#ffad7a', night: '#9fc9ff' };
 
   let currentState = buildTarget('day', 'clear');
@@ -3079,8 +3118,9 @@ ${isletDistanceGLSL}
   applyState(currentState);
 
   function syncUI() {
-    UI.statusTime.textContent = TIME_NAMES[UI.time];
-    UI.statusWeather.textContent = WEATHER_NAMES[UI.weather];
+    const lang = document.documentElement.lang === 'en' ? 'en' : 'zh';
+    UI.statusTime.textContent = TIME_LABELS[lang][UI.time];
+    UI.statusWeather.textContent = WEATHER_LABELS[lang][UI.weather];
     document.documentElement.style.setProperty('--accent-dot', TIME_DOTS[UI.time]);
     document.querySelectorAll('#timeSeg button').forEach(b => {
       b.setAttribute('aria-pressed', String(b.dataset.time === UI.time));
@@ -3088,6 +3128,33 @@ ${isletDistanceGLSL}
     document.querySelectorAll('#weatherSeg button').forEach(b => {
       b.setAttribute('aria-pressed', String(b.dataset.weather === UI.weather));
     });
+  }
+
+  function applyLanguage(lang) {
+    lang = lang === 'en' ? 'en' : 'zh';
+    const zh = lang === 'zh';
+    document.documentElement.lang = zh ? 'zh-CN' : 'en';
+    document.title = zh ? '马尔代夫环礁 · 3D 场景' : 'Maldives Atoll · 3D scene';
+    const set = (sel, text) => { const el = document.querySelector(sel); if (el) el.textContent = text; };
+    set('#panelTitle', zh ? '环礁光景' : 'Atoll scene');
+    set('#panelCoord', zh ? '北纬 04°11′ · 东经 73°30′' : '04°11′N · 73°30′E');
+    set('#lightLabel', zh ? '光' : 'Light');
+    set('#weatherLabel', zh ? '天' : 'Weather');
+    set('.h-orbit', zh ? '拖动环视' : 'Drag to orbit');
+    set('.h-zoom', zh ? '滚轮缩放' : 'Scroll to zoom');
+    set('.h-move', zh ? '方向键移动' : 'Arrow keys to move');
+    set('.h-reset', zh ? '双击复位' : 'Double-click to reset');
+    const app = document.getElementById('app');
+    if (app) app.setAttribute('aria-label', zh ? '马尔代夫环礁实时三维场景' : 'Maldives Atoll interactive 3D scene');
+    const panel = document.querySelector('.panel');
+    if (panel) panel.setAttribute('aria-label', zh ? '场景预设' : 'Scene presets');
+    const god = document.getElementById('godBtn');
+    if (god) {
+      const on = god.dataset.on === 'true';
+      god.textContent = zh ? (on ? '返回原位' : '上帝视角') : (on ? 'Back to view' : 'God view');
+      god.setAttribute('aria-label', zh ? (on ? '返回原机位' : '升空俯瞰') : (on ? 'Return to camera' : 'God view'));
+    }
+    syncUI();
   }
 
   function switchPreset() {
@@ -3128,7 +3195,11 @@ ${isletDistanceGLSL}
   });
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) autoOrbit = false;
   syncOrbitUI();
-  syncUI();
+  applyLanguage(document.documentElement.lang === 'en' ? 'en' : 'zh');
+  window.addEventListener('message', (e) => {
+    if (e.source !== window.parent) return;
+    if (e.data && e.data.type === 'maldives-lang') applyLanguage(e.data.lang);
+  });
 
   // keyboard shortcuts
   window.addEventListener('keydown', (e) => {
@@ -3373,6 +3444,7 @@ ${isletDistanceGLSL}
     get state() { return currentState; },
     setWeather(key) { UI.weather = key; switchPreset(); },
     setTime(key) { UI.time = key; switchPreset(); },
+    setLanguage: applyLanguage,
   };
 
   function onResize() {
