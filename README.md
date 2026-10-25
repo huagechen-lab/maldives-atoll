@@ -30,6 +30,9 @@ licensing:
 
 ## Credits and license
 
+See [LICENSE](./LICENSE) for the code/content split, non-commercial terms and
+license history.
+
 - Scene: **孙小画** · [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
 - Generated with **DeepSeek V4.1 Flash**
 - Landing page and build glue: © 2026 BillionWorlds, all rights reserved
