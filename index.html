@@ -39,15 +39,13 @@
 
   .promo {
     position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 10;
-    display: flex; align-items: center; gap: 8px; padding: 7px 8px 7px 12px;
+    display: flex; align-items: center; gap: 6px; padding: 7px;
     border-radius: 999px; border: 1px solid rgba(150, 230, 215, .24);
     background: rgba(4, 20, 22, .58); backdrop-filter: blur(12px) saturate(1.1);
     -webkit-backdrop-filter: blur(12px) saturate(1.1);
     box-shadow: 0 8px 28px rgba(0, 10, 12, .3);
     font-size: 12px; line-height: 1; white-space: nowrap; pointer-events: none;
   }
-  .brand { font-weight: 650; letter-spacing: .06em; color: #f2fffb; }
-  .brand span { margin-left: 7px; font-weight: 400; font-size: 10px; letter-spacing: .12em; color: rgba(170, 224, 214, .72); }
   .promo a {
     pointer-events: auto; display: inline-flex; align-items: center; gap: 5px;
     border-radius: 999px; padding: 8px 11px; text-decoration: none; font-weight: 600;
@@ -60,8 +58,8 @@
   .cta:hover { background: #e4fffa; }
 
   .credit {
-    position: fixed; top: 57px; left: 50%; transform: translateX(-50%); z-index: 9;
-    margin: 0; font-size: 9px; letter-spacing: .12em; color: rgba(190, 230, 222, .58);
+    position: fixed; bottom: 5px; left: 50%; transform: translateX(-50%); z-index: 9;
+    margin: 0; font-size: 8.5px; letter-spacing: .12em; color: rgba(190, 230, 222, .5);
     text-shadow: 0 1px 8px rgba(0, 0, 0, .5); pointer-events: none; white-space: nowrap;
   }
   .credit a { pointer-events: auto; color: inherit; }
@@ -75,9 +73,7 @@
   body.ready #load { opacity: 0; visibility: hidden; }
 
   @media (max-width: 760px) {
-    .promo { top: 92px; gap: 5px; padding: 5px 6px 5px 10px; font-size: 11px; }
-    .brand { font-size: 11px; }
-    .brand span { display: none; }
+    .promo { top: 132px; gap: 5px; padding: 5px 6px; font-size: 11px; }
     .promo a { padding: 7px 9px; }
     .credit { display: none; }
   }
@@ -96,7 +92,6 @@
 <iframe src="./scene.html" title="Maldives Atoll interactive 3D scene" sandbox="allow-scripts" allow="fullscreen" allowfullscreen loading="eager"></iframe>
 
 <div class="promo" role="group" aria-label="Maldives Atoll links">
-  <div class="brand">Maldives Atoll <span>马尔代夫环礁</span></div>
   <a class="share" href="https://twitter.com/intent/tweet?text=Maldives%20Atoll%20%E2%80%94%20a%203D%20world%20in%20your%20browser%2C%20made%20with%20one%20prompt.&url=https%3A%2F%2Fhuagechen-lab.github.io%2Fmaldives-atoll%2F&via=huagechen" target="_blank" rel="noopener">Share</a>
   <a class="cta" href="https://x.com/huagechen" target="_blank" rel="me noopener">Follow @huagechen</a>
 </div>
