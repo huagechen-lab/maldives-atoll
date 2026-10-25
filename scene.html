@@ -666,7 +666,7 @@
   btn.style.cssText = 'position:fixed;right:26px;top:84px;z-index:90;padding:10px 16px;font-size:12px;letter-spacing:.22em;background:rgba(8,8,14,.45);color:#f2e3c8;border:1px solid rgba(255,232,194,.4);border-radius:999px;cursor:pointer;backdrop-filter:blur(8px);font-family:inherit';
   document.body.appendChild(btn);
   var __on = false, __raf = null, __saved = null;
-  function __fly(toP, toT) {
+  function __fly(toP, toT, done) {
     var fP = camera.position.clone(), fT = controls.target.clone(), t0 = performance.now();
     controls.enabled = false;
     if (__raf) cancelAnimationFrame(__raf);
@@ -676,7 +676,11 @@
       camera.position.lerpVectors(fP, toP, k);
       controls.target.lerpVectors(fT, toT, k);
       camera.lookAt(controls.target);
-      if (k < 1) __raf = requestAnimationFrame(step); else controls.enabled = true;
+      if (k < 1) __raf = requestAnimationFrame(step);
+      else {
+        controls.enabled = true;
+        if (done) done();
+      }
     })();
   }
   btn.addEventListener('click', function () {
@@ -687,12 +691,27 @@
       ? (__on ? 'Back to view' : 'God view')
       : (__on ? '返回原位' : '上帝视角');
     if (__on) {
-      __saved = { p: camera.position.clone(), t: controls.target.clone() };
+      __saved = { p: camera.position.clone(), t: controls.target.clone(), fov: camera.fov };
+      if (window.__atollPauseOrbit) window.__atollPauseOrbit();
       var dir = camera.position.clone().sub(controls.target); dir.y = Math.max(dir.y, 1); dir.normalize();
       var far = Math.max(80, camera.position.distanceTo(controls.target) * 2.6);
       var toP = controls.target.clone().add(dir.multiplyScalar(far)); toP.y = Math.max(toP.y, far * 0.7);
       __fly(toP, controls.target.clone());
-    } else __fly(__saved.p, __saved.t);
+    } else if (__saved) {
+      var saved = __saved; __saved = null;
+      __fly(saved.p, saved.t, function () {
+        var damping = controls.enableDamping;
+        controls.enableDamping = false;
+        controls.update();                 // flush any residual orbit momentum first
+        camera.position.copy(saved.p);
+        controls.target.copy(saved.t);
+        camera.fov = saved.fov;
+        camera.updateProjectionMatrix();
+        camera.lookAt(controls.target);
+        controls.update();
+        controls.enableDamping = damping;
+      });
+    }
   });
 })();
 
@@ -3189,6 +3208,9 @@ ${isletDistanceGLSL}
     orbitToggle.setAttribute('aria-pressed', String(autoOrbit));
     controls.autoRotate = autoOrbit;
   }
+  window.__atollPauseOrbit = function () {
+    if (autoOrbit) { autoOrbit = false; syncOrbitUI(); }
+  };
   orbitToggle.addEventListener('click', () => {
     autoOrbit = !autoOrbit;
     if (autoOrbit) camReset = null;
@@ -3452,6 +3474,27 @@ ${isletDistanceGLSL}
     setWeather(key) { UI.weather = key; switchPreset(); },
     setTime(key) { UI.time = key; switchPreset(); },
     setLanguage: applyLanguage,
+  };
+  window.__bw = {
+    get god() { return document.querySelector('#godBtn')?.dataset.on === 'true'; },
+    get orbit() { return controls.autoRotate; },
+    get time() { return UI.time; },
+    get weather() { return UI.weather; },
+    cam() { return [camera.position.x, camera.position.y, camera.position.z].map((v) => +v.toFixed(3)); },
+    tgt() { return [controls.target.x, controls.target.y, controls.target.z].map((v) => +v.toFixed(3)); },
+    fov() { return +camera.fov.toFixed(2); },
+    presets() {
+      return {
+        time: [...document.querySelectorAll('#timeSeg button')].map((b) => b.dataset.time),
+        weather: [...document.querySelectorAll('#weatherSeg button')].map((b) => b.dataset.weather),
+      };
+    },
+    setTime(key) { UI.time = key; switchPreset(); },
+    setWeather(key) { UI.weather = key; switchPreset(); },
+    toggleGod() { document.querySelector('#godBtn').click(); },
+    setAutoOrbit(on) { autoOrbit = !!on; if (autoOrbit) camReset = null; syncOrbitUI(); },
+    setLanguage: applyLanguage,
+    settle(ms) { return new Promise((r) => setTimeout(r, ms)); },
   };
 
   function onResize() {
