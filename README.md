@@ -11,6 +11,9 @@ A standalone, interactive 3D Maldives atoll you can open in the browser.
 - Time presets: Day / Golden hour / Night
 - Weather presets: Clear / Drift / Overcast / Rain / Storm
 - Auto-orbit toggle
+- Chinese / English UI: auto-detected from the browser, toggle in the top bar, remembered locally; `?lang=zh` / `?lang=en` override
+
+Scene labels keep their original Chinese + English captions; only the landing UI switches.
 
 ## What it is
 
