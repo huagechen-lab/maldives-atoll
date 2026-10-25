@@ -18,6 +18,20 @@
     var lang = /^zh/i.test(raw || '') ? 'zh' : 'en';
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
   } catch (e) { /* keep default */ }
+
+  window.__mdToggleLang = function () {
+    var next = document.documentElement.lang === 'en' ? 'zh' : 'en';
+    document.documentElement.lang = next === 'zh' ? 'zh-CN' : 'en';
+    try { localStorage.setItem('maldives-lang', next); } catch (e) { /* storage may be disabled */ }
+    try { window.dispatchEvent(new Event('mdlangchange')); } catch (e) { /* older browser */ }
+  };
+  document.addEventListener('click', function (e) {
+    var el = e.target;
+    var btn = el && el.closest ? el.closest('#lang') : null;
+    if (!btn) return;
+    e.preventDefault();
+    window.__mdToggleLang();
+  }, true);
 })();
 </script>
 <title>马尔代夫环礁 · Maldives Atoll — a 3D world in your browser</title>
@@ -151,7 +165,6 @@
 
 <script>
   (function () {
-    var btn = document.getElementById('lang');
     var share = document.querySelector('.share');
     var meta = document.querySelector('meta[name="description"]');
     var titleZh = '马尔代夫环礁 · Maldives Atoll — 浏览器里的 3D 世界';
@@ -170,8 +183,8 @@
       if (save) { try { localStorage.setItem('maldives-lang', lang); } catch (e) { /* storage may be disabled */ } }
     }
     setLang(document.documentElement.lang === 'en' ? 'en' : 'zh', false);
-    if (btn) btn.addEventListener('click', function () {
-      setLang(document.documentElement.lang === 'en' ? 'zh' : 'en', true);
+    window.addEventListener('mdlangchange', function () {
+      setLang(document.documentElement.lang === 'en' ? 'en' : 'zh', false);
     });
   })();
 </script>
