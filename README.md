@@ -23,18 +23,18 @@ Three.js CDN.
 
 ## Use and credit
 
-CC BY 4.0 — copy-ready attribution, HTML snippet, press image and
-commercial / white-label licensing:
+CC BY-NC 4.0 — non-commercial reuse with attribution; commercial use requires
+a license. Copy-ready attribution, HTML snippet, press image and commercial
+licensing:
 [credit.html](https://huagechen-lab.github.io/maldives-atoll/credit.html).
 
 ## Credits and license
 
-- Scene: **孙小画** · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+- Scene: **孙小画** · [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
 - Generated with **DeepSeek V4.1 Flash**
 - Landing page and build glue: © 2026 BillionWorlds, all rights reserved
 
-The scene is published under CC BY 4.0; attribution is required for reuse.
-The landing page is not licensed for reuse.
+The scene is published under CC BY-NC 4.0: non-commercial reuse is allowed with attribution; **commercial use requires a separate license** (DM [@huagechen](https://x.com/huagechen)). Copies obtained before 2026-10-25 were under CC BY 4.0; those grants remain for those copies. The landing page is not licensed for reuse.
 
 ## Follow
 
